@@ -5,9 +5,11 @@ import lombok.*;
 
 import java.util.List;
 
-@Data
+
 @Entity
 @Table(name="users")
+@Getter
+@Setter
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,4 +23,6 @@ public class User {
 
     @OneToMany(mappedBy = "teacher")
     private List<Course> courseList;
+
+
 }
