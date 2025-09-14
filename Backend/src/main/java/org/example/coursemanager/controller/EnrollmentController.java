@@ -14,17 +14,17 @@ public class EnrollmentController {
     @Autowired
     private EnrollmentService enrollmentService;
 
-    @GetMapping
+    @GetMapping("/getAll")
     public List<Enrollment> getAllEnrollMents(){
         return enrollmentService.getAllEnrollMents();
     }
 
-    @PostMapping
+    @PostMapping("/create")
     public Enrollment createEnrollMent(@RequestBody Enrollment enrollment){
         return enrollmentService.createEnrollMent(enrollment);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/deletById/{id}")
     public String deleteEnrollMentById(@PathVariable Long id){
         return enrollmentService.deleteEnrollMentById(id);
     }

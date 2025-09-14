@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.util.List;
 
@@ -21,7 +22,8 @@ public class User {
     private String email;
     private String password;
     @Enumerated(EnumType.STRING)
-    private Roles roles;
+
+    private Roles roles = Roles.STUDENT;
 
     @OneToMany(mappedBy = "teacher")
     @JsonIgnore

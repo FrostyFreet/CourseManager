@@ -16,7 +16,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping
+    @GetMapping("/getAll")
     public List<User> getAllUsers(Authentication auth){
         if (auth.getAuthorities().equals("ROLE_USER")){
             throw new RuntimeException("You dont have access to this path");
@@ -25,29 +25,29 @@ public class UserController {
         return userService.getAllUsers();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/getById/{id}")
     public User getUserById(@PathVariable Long id){
 
         return userService.getUserById(id);
     }
-    @GetMapping("/by-name/{name}")
+    @GetMapping("/getByName/{name}")
     public User getUserByName(@PathVariable String name){
 
         return userService.getUserByName(name);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     public User updateUser(@PathVariable Long id, @RequestBody User user) {
         user.setId(id);
         return userService.updateUser(user);
     }
 
-    @PostMapping
-    public User createUser(@RequestBody User user){
+    @PostMapping("/create")
+    public String createUser(@RequestBody User user){
         return userService.register(user);
     }
 
-    @DeleteMapping("/{name}")
+    @DeleteMapping("/deletByName/{name}")
     public String deleteUserByName(@PathVariable String name){
         return userService.deleteUserByName(name);
     }

@@ -15,27 +15,27 @@ public class CourseController {
     @Autowired
     private CourseService courseService;
 
-    @GetMapping
+    @GetMapping("/getAll")
     public List<Course> getAllCourse(){
         return courseService.getAllCourse();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/getById/{id}")
     public Course getCourseById(@PathVariable Long id){
         return courseService.getCourseById(id);
     }
 
-    @PostMapping
+    @PostMapping("/create")
     public String createCourse(@RequestBody Course course){
         return courseService.createCourse(course);
     }
 
-    @PutMapping
+    @PutMapping("/update")
     public String updateCourse(@RequestBody Course course){
         return courseService.updateCourse(course);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/deleteById/{id}")
     public String deleteCourseById(@PathVariable Long id){
         return courseService.deleteCourseById(id);
     }

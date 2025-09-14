@@ -1,4 +1,4 @@
-package org.example.coursemanager.service;
+package org.example.coursemanager.security;
 
 import org.example.coursemanager.model.User;
 import org.example.coursemanager.repository.UserRepository;

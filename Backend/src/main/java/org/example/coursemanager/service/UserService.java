@@ -3,14 +3,9 @@ package org.example.coursemanager.service;
 import org.example.coursemanager.model.User;
 import org.example.coursemanager.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-
 import java.util.List;
 
 @Service
@@ -38,9 +33,15 @@ public class UserService {
         return userRepository.findByName(name).orElseThrow(() -> new RuntimeException("User not found with name: "+name));
     }
 
-    public User register(User user){
+    public String register(User user){
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return userRepository.save(user);
+        if (userRepository.existsByEmail(user.getEmail())){
+            return "Email already in use";
+        }
+
+        userRepository.save(user);
+
+        return "User Created!";
     }
 
     public User updateUser(User user) {
