@@ -1,6 +1,7 @@
 package org.example.coursemanager.model;
 
-public enum Roles {
+
+public enum Roles  {
     ADMIN,
     STUDENT,
     TEACHER
