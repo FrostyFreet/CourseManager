@@ -1,5 +1,6 @@
 package org.example.coursemanager.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -9,6 +10,8 @@ import java.sql.Date;
 @Data
 @Entity
 @Table(name="courses")
+@Getter
+@Setter
 public class Course {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

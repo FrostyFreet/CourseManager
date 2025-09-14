@@ -46,6 +46,8 @@ public class UserService {
     public User updateUser(User user) {
         User foundUser = userRepository.findById(user.getId()).orElseThrow(() -> new UsernameNotFoundException("User not found with id: "+user.getId()));
         foundUser.setEmail(user.getEmail());
+        foundUser.setName(user.getName());
+        foundUser.setRoles(user.getRoles());
 
         return userRepository.save(foundUser);
     }
