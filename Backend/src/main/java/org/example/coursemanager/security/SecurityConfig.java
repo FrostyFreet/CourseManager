@@ -34,20 +34,20 @@ public class SecurityConfig {
                                 .requestMatchers("/auth/register").permitAll()
                                 //User security endpoints
                                 .requestMatchers("/users/getAll").hasAnyRole("ADMIN","TEACHER")
-                                .requestMatchers("/users/getById/").hasAnyRole("ADMIN","TEACHER","STUDENT")
+                                .requestMatchers("/users/getById/*").hasAnyRole("ADMIN","TEACHER","STUDENT")
                                 .requestMatchers("/users/create").hasRole("ADMIN")
-                                .requestMatchers("/users/update/").hasAnyRole("ADMIN","STUDENT")
+                                .requestMatchers("/users/update/*").hasAnyRole("ADMIN","STUDENT")
                                 .requestMatchers("/users/deletByName/").hasRole("ADMIN")
                                 //Course security endpoints
                                 .requestMatchers("/course/getAll").hasAnyRole("ADMIN","TEACHER","STUDENT")
-                                .requestMatchers("/course/getById/").hasAnyRole("ADMIN","TEACHER","STUDENT")
+                                .requestMatchers("/course/getById/*").hasAnyRole("ADMIN","TEACHER","STUDENT")
                                 .requestMatchers("/course/create").hasAnyRole("ADMIN","TEACHER")
                                 .requestMatchers("/course/update").hasAnyRole("ADMIN","TEACHER")
-                                .requestMatchers("/course/deleteById/").hasAnyRole("ADMIN","TEACHER")
+                                .requestMatchers("/course/deleteById/*").hasAnyRole("ADMIN","TEACHER")
                                 //Enrollment security endpoints
                                 .requestMatchers("/enrollment/getAll").hasAnyRole("ADMIN","STUDENT")
                                 .requestMatchers("/enrollment/create").hasAnyRole("ADMIN","STUDENT")
-                                .requestMatchers("/enrollment/deletById/").hasAnyRole("ADMIN","STUDENT")
+                                .requestMatchers("/enrollment/deletById/*").hasAnyRole("ADMIN","STUDENT")
                 )
                 .build();
     }
