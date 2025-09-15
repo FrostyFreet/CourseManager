@@ -6,6 +6,7 @@ import org.example.coursemanager.model.User;
 import org.example.coursemanager.repository.CourseRepository;
 import org.example.coursemanager.repository.EnrollmentRepository;
 import org.example.coursemanager.repository.UserRepository;
+import org.example.coursemanager.security.CustomUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,15 +20,29 @@ public class EnrollmentService {
     @Autowired
     private UserRepository userRepository;
     @Autowired
+    private UserService userService;
+    @Autowired
     private CourseRepository courseRepository;
 
     public List<Enrollment> getAllEnrollMents(){
+        CustomUserDetails principal = userService.getCurrentUser();
+        if (principal.hasRole("STUDENT")){
+            User student = userRepository.findByEmail(principal.getEmail());
+
+            return enrollmentRepository.findByUser(student);
+        }
         return enrollmentRepository.findAll();
     }
 
     public Enrollment createEnrollMent(Enrollment enrollment){
+        CustomUserDetails principal = userService.getCurrentUser();
         User user = userRepository.findById(enrollment.getUser().getId()).orElseThrow(()-> new RuntimeException("User not found"));
         Course course = courseRepository.findById(enrollment.getCourse().getId()).orElseThrow(()-> new RuntimeException("Course not found"));
+        if (principal.hasRole("STUDENT")){
+            if (!user.getId().equals(principal.getId())) {
+                throw new RuntimeException("Students can only create enrollments for themselves!");
+            }
+        }
 
         enrollment.setUser(user);
         enrollment.setCourse(course);
@@ -37,8 +52,12 @@ public class EnrollmentService {
     }
 
     public String deleteEnrollMentById(Long id){
+        CustomUserDetails principal = userService.getCurrentUser();
         Enrollment found = enrollmentRepository.findById(id).orElseThrow(() -> new RuntimeException("Enrollment not found with id:" +id));
 
+        if (principal.hasRole("STUDENT") && !found.getUser().getId().equals(principal.getId())) {
+            throw new RuntimeException("Students can only delete their own enrollments!");
+        }
 
         enrollmentRepository.deleteById(found.getEnrollment_id());
 
