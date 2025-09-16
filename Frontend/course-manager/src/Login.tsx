@@ -14,12 +14,16 @@ import {type ChangeEvent, type FormEvent, useState} from "react"
 import {useNavigate} from "react-router"
 import axios from 'axios'
 
-export function Login(){
+interface LoginProps {
+    setToken: (token: string) => void
+    setRole: (role: string) => void
+}
+
+export function Login({ setToken, setRole }: LoginProps) {
 
     const [email,setEmail] = useState<string>()
     const [password,setPassword] = useState<string>()
-    const [token, setToken] = useState<string>()
-    const [,setRole] = useState<string>()
+
 
     const navigate = useNavigate();
     function login(e:FormEvent){
@@ -31,9 +35,7 @@ export function Login(){
         }).then((response) => {
             setToken(response.data.token)
             setRole(response.data.role)
-
-            if (token != null) localStorage.setItem("token", token)
-
+            localStorage.setItem("token", response.data.token)
         })
             .catch((err: Error) =>{
                 console.log(err)
@@ -42,6 +44,7 @@ export function Login(){
         setPassword("")
         setEmail("")
 
+        navigate("/home")
     }
 
     return (
