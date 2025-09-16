@@ -3,8 +3,6 @@ package org.example.coursemanager.controller;
 import org.example.coursemanager.model.User;
 import org.example.coursemanager.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,11 +15,7 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("/getAll")
-    public List<User> getAllUsers(Authentication auth){
-        if (auth.getAuthorities().equals("ROLE_USER")){
-            throw new RuntimeException("You dont have access to this path");
-        }
-
+    public List<User> getAllUsers(){
         return userService.getAllUsers();
     }
 
