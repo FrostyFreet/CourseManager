@@ -16,7 +16,7 @@ import AutoStoriesIcon from '@mui/icons-material/AutoStories';
 import {useNavigate} from "react-router";
 
 const admin = ['Összes kurzus', 'Felhasználók', 'Beiratkozások']
-const teacher = ['Kurzusaim']
+const teacher = ['Kurzusaim','Összes kurzus', 'Beiratkozásaim']
 const student = ['Összes kurzus', 'Beiratkozásaim']
 
 
@@ -52,7 +52,7 @@ export function Navbar({ role }: { role: string | undefined }) {
                         variant="h6"
                         noWrap
                         component="a"
-                        href="#"
+                        onClick={()=>{navigate("/home")}}
                         sx={{
                             mr: 2,
                             display: { xs: 'none', md: 'flex' },
@@ -66,14 +66,10 @@ export function Navbar({ role }: { role: string | undefined }) {
                         CourseManager
                     </Typography>
                     <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
-                        <IconButton
-                            size="large"
-                            aria-label="menu"
-                            aria-controls="menu-appbar"
-                            aria-haspopup="true"
+                        <IconButton size="large" aria-label="menu" aria-controls="menu-appbar" aria-haspopup="true"
                             onClick={handleOpenNavMenu}
                             color="inherit"
-                        >
+                    >
                             <MenuIcon />
                         </IconButton>
                         <Menu
@@ -93,17 +89,31 @@ export function Navbar({ role }: { role: string | undefined }) {
                             sx={{ display: { xs: 'block', md: 'none' } }}
                         >
                             {role === "ROLE_STUDENT" && student.map((page) => (
-                                <MenuItem key={page} onClick={handleCloseNavMenu}>
+                                <MenuItem key={page} onClick={() => {
+                                    handleCloseNavMenu
+                                    if (page === "Összes kurzus") navigate("/courses")
+                                    if (page === "Beiratkozásaim") navigate("/enrollments");
+                                }}>
                                     <Typography sx={{ textAlign: 'center' }}>{page}</Typography>
                                 </MenuItem>
                             ))}
                             {role === "ROLE_TEACHER" && teacher.map((page) => (
-                                <MenuItem key={page} onClick={handleCloseNavMenu}>
+                                <MenuItem key={page} onClick={()=>{
+                                    handleCloseNavMenu
+                                    if (page === "Összes kurzus") navigate("/courses")
+                                    if (page === "Beiratkozásaim") navigate("/enrollments");
+                                    if (page === "Kurzusaim") navigate("my-courses")
+                                    }}>
                                     <Typography sx={{ textAlign: 'center' }}>{page}</Typography>
                                 </MenuItem>
                             ))}
                             {role === "ROLE_ADMIN" && admin.map((page) => (
-                                <MenuItem key={page} onClick={handleCloseNavMenu}>
+                                <MenuItem key={page} onClick={()=>{
+                                    handleCloseNavMenu
+                                    if (page === "Összes kurzus") navigate("/courses")
+                                    if (page === "Beiratkozások") navigate("/enrollments");
+                                    if (page === "Felhasználók") navigate("/users")
+                                }}>
                                     <Typography sx={{ textAlign: 'center' }}>{page}</Typography>
                                 </MenuItem>
                             ))}
@@ -132,7 +142,11 @@ export function Navbar({ role }: { role: string | undefined }) {
                         {role === "ROLE_STUDENT" && student.map((page) => (
                             <Button
                                 key={page}
-                                onClick={handleCloseNavMenu}
+                                onClick={() => {
+                                    handleCloseNavMenu
+                                    if (page === "Összes kurzus") navigate("/courses")
+                                    if (page === "Kurzusaim") navigate("/enrollments");
+                                }}
                                 sx={{
                                     my: 2,
                                     color: 'white',
@@ -220,6 +234,12 @@ export function Navbar({ role }: { role: string | undefined }) {
                                 navigate("/");
                                 }}>
                                 <Typography sx={{ textAlign: 'center' }}>Log Out</Typography>
+                            </MenuItem>
+                            <MenuItem onClick={() => {
+                                handleCloseUserMenu();
+                                navigate("/create-course");
+                                }}>
+                                <Typography sx={{ textAlign: 'center' }}>Create Course</Typography>
                             </MenuItem>
                         </Menu>
                     </Box>

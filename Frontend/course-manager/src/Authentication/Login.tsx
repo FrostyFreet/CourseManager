@@ -12,14 +12,15 @@ import {
 } from "@mui/material"
 import {type ChangeEvent, type FormEvent, useState} from "react"
 import {useNavigate} from "react-router"
-import axios from 'axios'
+import axios from "axios"
 
 interface LoginProps {
     setToken: (token: string) => void
     setRole: (role: string) => void
+    setIsLoggedIn: (isLoggedIn: boolean) => void
 }
 
-export function Login({ setToken, setRole }: LoginProps) {
+export function Login({ setToken, setRole, setIsLoggedIn }: LoginProps) {
 
     const [email,setEmail] = useState<string>()
     const [password,setPassword] = useState<string>()
@@ -35,7 +36,10 @@ export function Login({ setToken, setRole }: LoginProps) {
         }).then((response) => {
             setToken(response.data.token)
             setRole(response.data.role)
+            setIsLoggedIn(true)
+
             localStorage.setItem("token", response.data.token)
+            navigate("/home")
         })
             .catch((err: Error) =>{
                 console.log(err)
@@ -44,7 +48,7 @@ export function Login({ setToken, setRole }: LoginProps) {
         setPassword("")
         setEmail("")
 
-        navigate("/home")
+        
     }
 
     return (

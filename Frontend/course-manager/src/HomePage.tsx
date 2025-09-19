@@ -1,11 +1,11 @@
-import {Navbar} from "./Navbar.tsx";
+import {CoursesPage} from "./CoursesPage.tsx";
 
-export function HomePage({ role }: { role: string | undefined }) {
+export function HomePage({ role }: { role: string | undefined}) {
+   
 
     return (
         <>
-            <Navbar role={role}/>
-
+            <CoursesPage role={role} />
         </>
     )
 }
