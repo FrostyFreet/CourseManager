@@ -10,6 +10,7 @@ import java.util.List;
 
 @RestController()
 @RequestMapping("/course")
+@CrossOrigin(origins = "http://localhost:5173", allowedHeaders = "*")
 public class CourseController {
 
     @Autowired

@@ -9,6 +9,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/enrollment")
+@CrossOrigin(origins = "http://localhost:5173", allowedHeaders = "*")
 public class EnrollmentController {
 
     @Autowired

@@ -1,6 +1,7 @@
 package org.example.coursemanager.security;
 
 
+import jakarta.servlet.http.HttpServletResponse;
 import org.example.coursemanager.JWT.JWTService;
 import org.example.coursemanager.model.Roles;
 import org.example.coursemanager.model.User;
@@ -8,16 +9,22 @@ import org.example.coursemanager.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
+import java.util.Map;
+
 
 @RestController
+@CrossOrigin(origins = "http://localhost:5173")
 public class Authentication {
 
     @Autowired
@@ -47,19 +54,27 @@ public class Authentication {
     }
 
     @PostMapping("/auth/login")
-    public ResponseEntity<String> login(@RequestBody User loginRequest) {
+    public ResponseEntity< Map<String,String> > login(@RequestBody User loginRequest, HttpServletResponse response) {
         org.springframework.security.core.Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
 
         if (authentication.isAuthenticated()){
             CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-            String token = jwtService.generateToken(userDetails.getEmail());
-            return ResponseEntity.ok()
-                    .header(HttpHeaders.AUTHORIZATION,"Bearer "+token)
-                    .body("Logged in!");
+            String token = jwtService.generateToken(userDetails.getEmail(), userDetails.getAuthorities().iterator().next().getAuthority());
+
+            Map<String,String> header = new HashMap<>();
+
+            header.put("role", userDetails.getAuthorities().iterator().next().getAuthority());
+            header.put("token",token);
+            return ResponseEntity.ok(header);
+
         }
         else{
-            return new ResponseEntity<>("Bad username/password!", HttpStatus.BAD_REQUEST);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of("error", "Bad username/password!"));
         }
     }
+
+
+
 
 }

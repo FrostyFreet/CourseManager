@@ -32,17 +32,21 @@ public class CourseService {
     public String createCourse(Course course){
         try {
             CustomUserDetails principal = userService.getCurrentUser();
-            if (principal.hasRole("ADMIN") || principal.hasRole("TEACHER")){
-                User user = userRepository.findById(course.getTeacher().getId()).orElseThrow(() -> new RuntimeException("Teacher not found"));
+            System.out.println(principal.getId());
 
+            User user = userRepository.findById(principal.getId()).orElseThrow(() -> new RuntimeException("User not found"));
+            if (course.getTeacher() == null){
                 course.setTeacher(user);
-                courseRepository.save(course);
+            } else {
+                User teacher = userRepository.findById(course.getTeacher().getId()).orElseThrow(() -> new RuntimeException("Teacher not found"));
+                course.setTeacher(teacher);
+            }
 
-                return "Course created!";
-            }
-           else{
-               return "You don't have permission to create a course!";
-            }
+
+            courseRepository.save(course);
+
+            return "Course created!";
+
         }
         catch (Exception e){
             return "Course creation failed: "+e;
@@ -67,6 +71,14 @@ public class CourseService {
         return "You don't have permission to update this course!";
     }
 
+    public void uploadImage(String file){
+        try{
+
+        }catch (Exception e){
+            System.out.println(e);
+        }
+    }
+
     public String deleteCourseById(Long id){
         CustomUserDetails principal = userService.getCurrentUser();
         Course foundCourse = courseRepository.findById(id).orElseThrow(() -> new RuntimeException("Course not found"));
@@ -79,5 +91,6 @@ public class CourseService {
 
         return "You don't have permission to delete this course!";
     }
+
 
 }

@@ -19,6 +19,7 @@ public class Course {
     private String title;
     private String description;
     private Date startDate;
+    private String imageUrl;
     @ManyToOne
     @JoinColumn(name = "teacher_id", nullable = false)
     private User teacher;
