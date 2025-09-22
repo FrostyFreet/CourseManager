@@ -35,7 +35,6 @@ export default function CreateCoursePage({ role }: { role: Role }) {
             },
         });
 
-        console.log("Uploaded Cloudinary URL:", res.data.url);
         return res.data.url;
     }
 

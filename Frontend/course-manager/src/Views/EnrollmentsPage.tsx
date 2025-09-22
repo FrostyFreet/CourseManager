@@ -19,9 +19,6 @@ export function EnrollmentsPage({ role }: { role: Role }){
     if (error) return <p>Error loading your enrollments</p>;
     const enrollmentList = Array.isArray(enrollments) ? enrollments : [];
     
-    console.log(enrollments);
-    
-    
     return(
         <>
         <Navbar role={role}/>
@@ -52,10 +49,8 @@ export function EnrollmentsPage({ role }: { role: Role }){
                                 </CardContent>
                                 </CardActionArea>
                             </Link>
-                            <CardActions sx={{ justifyContent: "space-between" }}>
-                             <Button variant="outlined" size="small" color="primary">
-                                Share
-                            </Button>
+                            <CardActions sx={{ justifyContent: "right" }}>
+                            
                             <Button variant="contained" value={data.enrollment_id} size="small" color="primary" onClick={async (e) => { await withDrawCourse(Number(e.currentTarget.value)), navigate(0)}}>
                                Withdraw
                             </Button>

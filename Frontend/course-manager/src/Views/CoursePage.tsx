@@ -5,7 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import defaultImage from "../public/default.webp";
 
 import { Container, CircularProgress, Alert, Card, CardMedia, CardContent, Typography, Box, Button } from "@mui/material";
-import { fetchCourseById, getCurrentUserByEmail } from "../utility/apiCalls";
+import { fetchCourseById, getCurrentUser } from "../utility/apiCalls";
 
 
 
@@ -24,7 +24,7 @@ export default function CoursePage({ role }: { role: Role }){
 
     const { data: currentUser, isLoading: userLoading, error: userError } = useQuery({
         queryKey: ["currentUser"],
-        queryFn: () => getCurrentUserByEmail(),
+        queryFn: () => getCurrentUser(),
         enabled: !!localStorage.getItem("token"),
     });
     const teacherId = course?.teacher?.id

@@ -90,8 +90,20 @@ export async function getUserById(id:number){
     return res.data
 }
 
-export async function getCurrentUserByEmail(){
+export async function getCurrentUser(){
     const res = await axios.get(`http://localhost:8080/users/getCurrentUserByEmail`,{
+            headers: { 
+                "Authorization": "Bearer " + localStorage.getItem("token"),
+            },
+    })
+
+    return res.data
+}
+
+export async function updateUser(payload){
+    const res = await axios.put(`http://localhost:8080/users/update/${payload.id}`,
+        payload,
+        {
             headers: { 
                 "Authorization": "Bearer " + localStorage.getItem("token"),
             },
@@ -180,7 +192,6 @@ export async function checkIsLoggedIn() {
     
 
     try {
-        console.log("JWT lejárt, refresh tokennel próbálkozunk...", refreshToken)
         const res = await fetch("http://localhost:8080/auth/refresh", {
             method: "POST",
             headers: { "Content-Type": "application/json" },

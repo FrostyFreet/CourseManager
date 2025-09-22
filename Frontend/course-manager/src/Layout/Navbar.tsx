@@ -15,7 +15,8 @@ import MenuIcon from '@mui/icons-material/Menu'
 import AutoStoriesIcon from '@mui/icons-material/AutoStories';
 import {useNavigate} from "react-router";
 import type { Role } from "../types.tsx";
-import { logOut } from "../utility/apiCalls.tsx";
+import { getCurrentUser, logOut } from "../utility/apiCalls.tsx";
+import { useQuery } from "@tanstack/react-query";
 
 const admin = ['Összes kurzus', 'Felhasználók', 'Beiratkozásaim']
 const teacher = ['Kurzusaim','Összes kurzus', 'Beiratkozásaim']
@@ -26,17 +27,22 @@ export function Navbar({ role }: { role: Role }) {
     const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null)
     const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null)
 
-    const handleOpenNavMenu = (event: MouseEvent<HTMLElement>) => {
-        setAnchorElNav(event.currentTarget)
-    }
-    const handleOpenUserMenu = (event: MouseEvent<HTMLElement>) => {
-        setAnchorElUser(event.currentTarget)
-    }
+    const handleOpenNavMenu = (event: MouseEvent<HTMLElement>) => setAnchorElNav(event.currentTarget)
+    
+    const handleOpenUserMenu = (event: MouseEvent<HTMLElement>) => setAnchorElUser(event.currentTarget)
+    
     const handleCloseNavMenu = () => setAnchorElNav(null)
     const handleCloseUserMenu = () => setAnchorElUser(null)
 
     const navigate = useNavigate()
 
+     const { data: currentUser } = useQuery({
+        queryKey: ["currentUser"],
+        queryFn: () => getCurrentUser(),
+        enabled: !!localStorage.getItem("token"),
+    })
+    
+    
     const roleDisplay = {
         ROLE_ADMIN: "Admin",
         ROLE_TEACHER: "Teacher",
@@ -240,6 +246,12 @@ export function Navbar({ role }: { role: Role }) {
                             open={Boolean(anchorElUser)}
                             onClose={handleCloseUserMenu}
                         >
+                             <MenuItem onClick={() => {
+                                handleCloseUserMenu();
+                                navigate(`/edit-profile/${currentUser.name}`, {state: {id:currentUser.id}});
+                                }}>
+                                <Typography sx={{ textAlign: 'center' }}>Profile</Typography>
+                            </MenuItem>
                             <MenuItem onClick={() => {
                                 handleCloseUserMenu();
                                 navigate("/create-course");

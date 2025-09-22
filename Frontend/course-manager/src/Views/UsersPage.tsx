@@ -43,7 +43,7 @@ export default function UsersPage({role}: {role:Role}){
               >
                 <TableCell>
                   <Avatar sx={{ bgcolor: "primary.main" }}>
-                    {user.name[0].toUpperCase()}
+                    {user?.name?.[0].toUpperCase()}
                   </Avatar>
                 </TableCell>
                 <TableCell>
@@ -56,7 +56,7 @@ export default function UsersPage({role}: {role:Role}){
                   </Typography>
                 </TableCell>
                 <TableCell align="right">
-                  <IconButton color="primary" size="small" onClick={()=> {navigate("/editUser")}}>
+                  <IconButton color="primary" size="small" onClick={()=> {navigate(`/edit-profile/${user.name}`, {state: {id:user.id}})}}>
                     <Edit fontSize="small" />
                   </IconButton>
                   <IconButton color="error" size="small" onClick={async ()=> {await deleteUser(user.id), queryClient.invalidateQueries({ queryKey: ['users'] })

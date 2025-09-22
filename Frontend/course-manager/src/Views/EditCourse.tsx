@@ -50,7 +50,6 @@ export default function EditCourse({ role }: { role: Role }) {
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(formData);
     
     try {
       await updateMyCourse(formData);

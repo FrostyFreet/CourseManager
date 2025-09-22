@@ -91,10 +91,7 @@ export function CoursesPage({ role }: { role: Role } ) {
                                 </CardContent>
                             </CardActionArea>
                         </Link>
-                            <CardActions sx={{ justifyContent: "space-between" }}>
-                                <Button variant="outlined" size="small" color="primary">
-                                    Share
-                                </Button>
+                            <CardActions sx={{ justifyContent: "right" }}>
                                 <Button variant="contained" value={data.id} size="small" color="primary" onClick={(e) => {enrollCourse(Number(e.currentTarget.value)), navigate(0)}}>
                                     Enroll
                                 </Button>

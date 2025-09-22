@@ -15,6 +15,7 @@ import { EnrollmentsPage } from "./Views/EnrollmentsPage.tsx";
 import UsersPage from "./Views/UsersPage.tsx";
 import EnrolledStudents from "./Views/EnrolledStudents.tsx";
 import EditCourse from "./Views/EditCourse.tsx";
+import { EditProfile } from "./Views/EditProfile.tsx";
 
 
 const queryClient = new QueryClient()
@@ -40,11 +41,7 @@ function App() {
                 if (location.pathname !== "/" && location.pathname !== "/register"){
                     navigate("/")
                 }
-                
             }
-            console.log(result);
-            
-            
         }
         fetch()
         
@@ -67,6 +64,7 @@ function App() {
                 <Route path={"/users"} element={<UsersPage  role={role} />}/>
                 <Route path={"/enrolledStudents"} element={<EnrolledStudents  role={role} />}/>
                 <Route path={"/edit-course/:name"} element={<EditCourse role={role} />}/>
+                <Route path={"/edit-profile/:name"} element={<EditProfile role={role} />}/>
                 
             </Routes>
         </QueryClientProvider>
