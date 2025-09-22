@@ -15,6 +15,7 @@ import MenuIcon from '@mui/icons-material/Menu'
 import AutoStoriesIcon from '@mui/icons-material/AutoStories';
 import {useNavigate} from "react-router";
 import type { Role } from "../types.tsx";
+import { logOut } from "../utility/apiCalls.tsx";
 
 const admin = ['Összes kurzus', 'Felhasználók', 'Beiratkozásaim']
 const teacher = ['Kurzusaim','Összes kurzus', 'Beiratkozásaim']
@@ -240,17 +241,18 @@ export function Navbar({ role }: { role: Role }) {
                             onClose={handleCloseUserMenu}
                         >
                             <MenuItem onClick={() => {
-                                localStorage.removeItem("token");
-                                handleCloseUserMenu();
-                                navigate("/");
-                                }}>
-                                <Typography sx={{ textAlign: 'center' }}>Log Out</Typography>
-                            </MenuItem>
-                            <MenuItem onClick={() => {
                                 handleCloseUserMenu();
                                 navigate("/create-course");
                                 }}>
                                 <Typography sx={{ textAlign: 'center' }}>Create Course</Typography>
+                            </MenuItem>
+
+                             <MenuItem onClick={() => {
+                                handleCloseUserMenu()
+                                logOut()
+                                navigate("/");
+                                }}>
+                                <Typography sx={{ textAlign: 'center' }}>Log Out</Typography>
                             </MenuItem>
                         </Menu>
                     </Box>

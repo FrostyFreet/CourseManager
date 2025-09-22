@@ -126,6 +126,24 @@ public class Authentication {
         return ResponseEntity.ok(response);
     }
 
+    @PostMapping("/auth/logOut")
+    public ResponseEntity<?> logOut(@RequestBody Map<String, String> request) {
+        String requestToken = request.get("refreshToken");
+
+        RefreshToken oldToken = refreshTokenRepository.findByToken(requestToken)
+                .orElseThrow(() -> new RuntimeException("Invalid refresh token"));
+
+        if (oldToken.getExpiryDate().isBefore(Instant.now())) {
+            refreshTokenRepository.delete(oldToken);
+            throw new RuntimeException("Refresh token expired");
+        }
+
+        refreshTokenRepository.delete(oldToken);
+
+
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
+
 
 
 }

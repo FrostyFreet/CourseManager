@@ -32,19 +32,19 @@ export async function getMyCourses(){
         return res.data
 }
 export async function updateMyCourse(course: {
-  id: number;
-  title: string;
-  description: string;
-  startDate: string;
-  imageUrl: string;
+  id: number
+  title: string
+  description: string
+  startDate: string
+  imageUrl: string
 }) {
   const res = await axios.put("http://localhost:8080/course/update", course, {
     headers: {
       Authorization: `Bearer ${localStorage.getItem("token")}`,
     },
-  });
+  })
 
-  return res.data;
+  return res.data
 }
 
 
@@ -159,50 +159,71 @@ export async function deleteCourse(courseId:number){
 
 
 export async function checkIsLoggedIn() {
-    let storedToken = localStorage.getItem("token");
-    const refreshToken = localStorage.getItem("refreshToken");
-    const now = Date.now() / 1000;
+    let storedToken = localStorage.getItem("token")
+    const refreshToken = localStorage.getItem("refreshToken")
+    const now = Date.now() / 1000
 
-    if (!storedToken) return false;
+    if (!storedToken) return false
 
-    let decoded: any;
+    let decoded: any
     try {
-        decoded = jwtDecode(storedToken);
+        decoded = jwtDecode(storedToken)
     } catch {
-        localStorage.removeItem("token");
-        return false;
+        localStorage.removeItem("token")
+        return false
     }
 
-    if (decoded.exp > now)  return decoded;
+    if (decoded.exp > now)  return decoded
     
 
-    if (!refreshToken) return false;
+    if (!refreshToken) return false
     
 
     try {
-        console.log("JWT lejárt, refresh tokennel próbálkozunk...", refreshToken);
+        console.log("JWT lejárt, refresh tokennel próbálkozunk...", refreshToken)
         const res = await fetch("http://localhost:8080/auth/refresh", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ refreshToken })
-        });
+        })
 
         if (!res.ok) {
-            localStorage.removeItem("token");
-            localStorage.removeItem("refreshToken");
-            return false;
+            localStorage.removeItem("token")
+            localStorage.removeItem("refreshToken")
+            return false
         }
 
-        const data = await res.json();
-        localStorage.setItem("token", data.token);
-        localStorage.setItem("refreshToken", data.refreshToken);
+        const data = await res.json()
+        localStorage.setItem("token", data.token)
+        localStorage.setItem("refreshToken", data.refreshToken)
 
-        decoded = jwtDecode(data.token);
-        return decoded;
+        decoded = jwtDecode(data.token)
+        return decoded
 
     } catch (err) {
-        localStorage.removeItem("token");
-        localStorage.removeItem("refreshToken");
-        return false;
+        localStorage.removeItem("token")
+        localStorage.removeItem("refreshToken")
+        return false
+    }
+}
+
+export async function logOut(){
+     const refreshToken = localStorage.getItem("refreshToken")
+     const token = localStorage.getItem("token")
+     try {
+        const res = await axios.post("http://localhost:8080/auth/logOut",{
+            refreshToken
+        })
+        if (refreshToken) localStorage.removeItem("refreshToken")
+        if (token) localStorage.removeItem("token");
+
+
+    
+
+     return res.data
+
+    } catch (err) {
+      
+        return "Error while logging out!"+err
     }
 }

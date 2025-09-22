@@ -35,7 +35,7 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(auth ->
                         auth
-                                .requestMatchers("/auth/register", "/auth/login", "/auth/refresh").permitAll()
+                                .requestMatchers("/auth/register", "/auth/login", "/auth/refresh", "/auth/logOut").permitAll()
                                 //User security endpoints
                                 .requestMatchers("/users/getAll").hasAnyRole("ADMIN","TEACHER")
                                 .requestMatchers("/users/getById/*").hasAnyRole("ADMIN","TEACHER","STUDENT")
