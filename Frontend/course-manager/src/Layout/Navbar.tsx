@@ -14,13 +14,14 @@ import { type MouseEvent, useState } from "react"
 import MenuIcon from '@mui/icons-material/Menu'
 import AutoStoriesIcon from '@mui/icons-material/AutoStories';
 import {useNavigate} from "react-router";
+import type { Role } from "../types.tsx";
 
-const admin = ['Összes kurzus', 'Felhasználók', 'Beiratkozások']
+const admin = ['Összes kurzus', 'Felhasználók', 'Beiratkozásaim']
 const teacher = ['Kurzusaim','Összes kurzus', 'Beiratkozásaim']
 const student = ['Összes kurzus', 'Beiratkozásaim']
 
 
-export function Navbar({ role }: { role: string | undefined }) {
+export function Navbar({ role }: { role: Role }) {
     const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null)
     const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null)
 
@@ -38,7 +39,7 @@ export function Navbar({ role }: { role: string | undefined }) {
     const roleDisplay = {
         ROLE_ADMIN: "Admin",
         ROLE_TEACHER: "Teacher",
-        ROLE_STUDENT: "Student"
+        ROLE_STUDENT: "Student",
     }[role ?? ""] ?? "Guest"
 
     return (
@@ -102,7 +103,7 @@ export function Navbar({ role }: { role: string | undefined }) {
                                     handleCloseNavMenu
                                     if (page === "Összes kurzus") navigate("/courses")
                                     if (page === "Beiratkozásaim") navigate("/enrollments");
-                                    if (page === "Kurzusaim") navigate("my-courses")
+                                    if (page === "Kurzusaim") navigate("/my-courses")
                                     }}>
                                     <Typography sx={{ textAlign: 'center' }}>{page}</Typography>
                                 </MenuItem>
@@ -111,7 +112,7 @@ export function Navbar({ role }: { role: string | undefined }) {
                                 <MenuItem key={page} onClick={()=>{
                                     handleCloseNavMenu
                                     if (page === "Összes kurzus") navigate("/courses")
-                                    if (page === "Beiratkozások") navigate("/enrollments");
+                                    if (page === "Beiratkozásaim") navigate("/enrollments");
                                     if (page === "Felhasználók") navigate("/users")
                                 }}>
                                     <Typography sx={{ textAlign: 'center' }}>{page}</Typography>
@@ -145,7 +146,7 @@ export function Navbar({ role }: { role: string | undefined }) {
                                 onClick={() => {
                                     handleCloseNavMenu
                                     if (page === "Összes kurzus") navigate("/courses")
-                                    if (page === "Kurzusaim") navigate("/enrollments");
+                                    if (page === "Beiratkozásaim") navigate("/enrollments");
                                 }}
                                 sx={{
                                     my: 2,
@@ -162,7 +163,12 @@ export function Navbar({ role }: { role: string | undefined }) {
                         {role === "ROLE_TEACHER" && teacher.map((page) => (
                             <Button
                                 key={page}
-                                onClick={handleCloseNavMenu}
+                                onClick={()=>{
+                                    handleCloseNavMenu
+                                    if (page === "Összes kurzus") navigate("/courses")
+                                    if (page === "Beiratkozásaim") navigate("/enrollments");
+                                    if (page === "Kurzusaim") navigate("/my-courses")
+                                }}
                                 sx={{
                                     my: 2,
                                     color: 'white',
@@ -178,7 +184,12 @@ export function Navbar({ role }: { role: string | undefined }) {
                         {role === "ROLE_ADMIN" && admin.map((page) => (
                             <Button
                                 key={page}
-                                onClick={handleCloseNavMenu}
+                                onClick={()=>{
+                                    handleCloseNavMenu
+                                    if (page === "Összes kurzus") navigate("/courses")
+                                    if (page === "Beiratkozásaim") navigate("/enrollments");
+                                    if (page === "Felhasználók") navigate("/users")
+                                }}
                                 sx={{
                                     my: 2,
                                     color: 'white',

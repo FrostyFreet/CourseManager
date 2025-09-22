@@ -21,6 +21,16 @@ public class CourseController {
         return courseService.getAllCourse();
     }
 
+    @GetMapping("/getByTitle/{title}")
+    public Course getCourseByTitle(@PathVariable String title){
+        return courseService.getCourseByTitle(title);
+    }
+
+    @GetMapping("/getCoursesByTeacher")
+    public List<Course> getCourseByTitle(){
+        return courseService.getCoursesByTeacherId();
+    }
+
     @GetMapping("/getById/{id}")
     public Course getCourseById(@PathVariable Long id){
         return courseService.getCourseById(id);

@@ -26,7 +26,7 @@ public class EnrollmentService {
 
     public List<Enrollment> getAllEnrollMents(){
         CustomUserDetails principal = userService.getCurrentUser();
-        if (principal.hasRole("STUDENT")){
+        if (principal.hasRole("STUDENT") || principal.hasRole("TEACHER")){
             User student = userRepository.findByEmail(principal.getEmail());
 
             return enrollmentRepository.findByUser(student);
@@ -34,14 +34,37 @@ public class EnrollmentService {
         return enrollmentRepository.findAll();
     }
 
+    public List<Enrollment> getAllByCourseId(Long id){
+        CustomUserDetails principal = userService.getCurrentUser();
+//        if (principal.hasRole("STUDENT")){
+//            User student = userRepository.findByEmail(principal.getEmail());
+//
+//            return enrollmentRepository.findByUser(student);
+//        }
+        List<Enrollment> found = enrollmentRepository.findAllByCourse_Id(id);
+
+
+        return found;
+    }
+
+
+
+
     public Enrollment createEnrollMent(Enrollment enrollment){
         CustomUserDetails principal = userService.getCurrentUser();
-        User user = userRepository.findById(enrollment.getUser().getId()).orElseThrow(()-> new RuntimeException("User not found"));
+        User user = userRepository.findById(principal.getId()).orElseThrow(()-> new RuntimeException("User not found"));
         Course course = courseRepository.findById(enrollment.getCourse().getId()).orElseThrow(()-> new RuntimeException("Course not found"));
+        boolean alreadyEnrolled = enrollmentRepository.existsByUser_IdAndCourse_Id(user.getId(),course.getId());
+
+        if (alreadyEnrolled) throw new RuntimeException("Already enrolled this course");
+
         if (principal.hasRole("STUDENT")){
             if (!user.getId().equals(principal.getId())) {
                 throw new RuntimeException("Students can only create enrollments for themselves!");
             }
+        }
+        if (principal.getId().equals(course.getTeacher().getId())) {
+            throw new RuntimeException("You cannot enroll your own course!");
         }
 
         enrollment.setUser(user);
@@ -51,7 +74,7 @@ public class EnrollmentService {
 
     }
 
-    public String deleteEnrollMentById(Long id){
+    public String deleteEnrollmentById(Long id){
         CustomUserDetails principal = userService.getCurrentUser();
         Enrollment found = enrollmentRepository.findById(id).orElseThrow(() -> new RuntimeException("Enrollment not found with id:" +id));
 

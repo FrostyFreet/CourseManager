@@ -20,13 +20,18 @@ public class EnrollmentController {
         return enrollmentService.getAllEnrollMents();
     }
 
+    @GetMapping("/getAllByCourseId/{id}")
+    public List<Enrollment> getAllByCourseId(@PathVariable Long id){
+        return enrollmentService.getAllByCourseId(id);
+    }
+
     @PostMapping("/create")
     public Enrollment createEnrollMent(@RequestBody Enrollment enrollment){
         return enrollmentService.createEnrollMent(enrollment);
     }
 
-    @DeleteMapping("/deletById/{id}")
-    public String deleteEnrollMentById(@PathVariable Long id){
-        return enrollmentService.deleteEnrollMentById(id);
+    @DeleteMapping("/deleteById/{id}")
+    public String deleteEnrollmentById(@PathVariable Long id){
+        return enrollmentService.deleteEnrollmentById(id);
     }
 }

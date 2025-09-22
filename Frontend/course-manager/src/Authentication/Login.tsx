@@ -22,8 +22,8 @@ interface LoginProps {
 
 export function Login({ setToken, setRole, setIsLoggedIn }: LoginProps) {
 
-    const [email,setEmail] = useState<string>()
-    const [password,setPassword] = useState<string>()
+    const [email,setEmail] = useState<string>("")
+    const [password,setPassword] = useState<string>("")
 
 
     const navigate = useNavigate();
@@ -39,6 +39,7 @@ export function Login({ setToken, setRole, setIsLoggedIn }: LoginProps) {
             setIsLoggedIn(true)
 
             localStorage.setItem("token", response.data.token)
+            localStorage.setItem("refreshToken", response.data.refreshToken);
             navigate("/home")
         })
             .catch((err: Error) =>{
@@ -47,8 +48,6 @@ export function Login({ setToken, setRole, setIsLoggedIn }: LoginProps) {
 
         setPassword("")
         setEmail("")
-
-        
     }
 
     return (

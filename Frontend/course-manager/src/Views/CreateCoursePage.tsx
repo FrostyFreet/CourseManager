@@ -1,8 +1,10 @@
 import { Typography, Box, Paper, Button, Stack, TextField, Input } from "@mui/material";
 import axios from "axios"
 import { useState, type FormEvent } from "react"
-import { Navbar } from "./Navbar"
-export default function CreateCoursePage({ role }: { role: string | undefined }) {
+import { Navbar } from "../Layout/Navbar.tsx"
+import type { Role } from "../types.tsx";
+
+export default function CreateCoursePage({ role }: { role: Role }) {
    const [formData, setFormData] = useState({
         "title": "",
         "description": "",
@@ -21,48 +23,65 @@ export default function CreateCoursePage({ role }: { role: string | undefined })
         }
     }
 
-     async function handleUpload() {
-        if (!file) return;
-            const formData = new FormData();
-            formData.append("file", file);
+     async function handleUpload(): Promise<string | null> {
+        if (!file) return null;
+        const formData = new FormData();
+        formData.append("file", file);
 
-            const res = await axios.post("http://localhost:8080/upload", formData, {
-                headers: { "Content-Type": "multipart/form-data",
-                     "Authorization": "Bearer " + localStorage.getItem("token"),
-                },
+        const res = await axios.post("http://localhost:8080/upload", formData, {
+            headers: { 
+                "Content-Type": "multipart/form-data",
+                "Authorization": "Bearer " + localStorage.getItem("token"),
+            },
         });
 
-        setUploadedUrl(res.data.url);
         console.log("Uploaded Cloudinary URL:", res.data.url);
+        return res.data.url;
     }
 
-    async function createCourse(e: FormEvent){
-        e.preventDefault()
+
+    async function createCourse(e: FormEvent) {
+        e.preventDefault();
+
+        let imageUrl = uploadedUrl;
+
         if (file && !formData.imageUrl) {
-            await handleUpload();
+            imageUrl = await handleUpload();
         }
+
         try {
             const res = await axios.post(
-            "http://localhost:8080/course/create",
-            {
-                title: formData.title,
-                description: formData.description,
-                startDate: formData.startDate,
-                imageUrl: uploadedUrl,
-            },
-            {
-                headers: {
-                Authorization: "Bearer " + localStorage.getItem("token"),
+                "http://localhost:8080/course/create",
+                {
+                    title: formData.title,
+                    description: formData.description,
+                    startDate: formData.startDate,
+                    imageUrl: imageUrl, 
                 },
-            }
+                {
+                    headers: {
+                        Authorization: "Bearer " + localStorage.getItem("token"),
+                    },
+                }
             );
+
+            setFormData({
+                title: "",
+                description: "",
+                startDate: "",
+                imageUrl: ""
+            });
+            setFile(null);
+            setPreview(null);
+            setUploadedUrl(null);
 
             console.log("Course created successfully:", res.data);
         } catch (err) {
             console.error("Error creating course:", err);
         }
-
     }
+
+
      return (
         <>
         <Navbar role={role}/>
@@ -93,13 +112,13 @@ export default function CreateCoursePage({ role }: { role: string | undefined })
                 <form onSubmit={createCourse}>
                 
                 <Stack spacing={3}>
-                    <TextField label="Title" name="title" fullWidth onChange={(e) => setFormData({...formData, [e.target.name]: e.target.value})} 
+                    <TextField label="Title" name="title" fullWidth value={formData.title} onChange={(e) => setFormData({...formData, [e.target.name]: e.target.value})} 
                     variant="outlined"
                     />
-                    <TextField label="Description" name="description" multiline rows={3} fullWidth onChange={(e) => setFormData({...formData, [e.target.name]: e.target.value})}
+                    <TextField label="Description" name="description" multiline rows={3} value={formData.description} fullWidth onChange={(e) => setFormData({...formData, [e.target.name]: e.target.value})}
                     variant="outlined"
                     />
-                    <TextField label="Start Date" name="startDate" type="date" InputLabelProps={{ shrink: true }} fullWidth onChange={(e) => setFormData({...formData, [e.target.name]: e.target.value})}
+                    <TextField label="Start Date" name="startDate" type="date" value={formData.startDate} InputLabelProps={{ shrink: true }} fullWidth onChange={(e) => setFormData({...formData, [e.target.name]: e.target.value})}
                     variant="outlined"
                     />
                     <Input type="file" onChange={handleFileChange}/>

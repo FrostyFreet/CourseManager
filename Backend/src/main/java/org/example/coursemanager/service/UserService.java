@@ -54,6 +54,12 @@ public class UserService {
         return user;
     }
 
+    public User getCurrentUserByEmail(){
+        CustomUserDetails principal = getCurrentUser();
+
+        return userRepository.findByEmail(principal.getEmail());
+    }
+
     public User getUserByName(String name){
         return userRepository.findByName(name).orElseThrow(() -> new RuntimeException("User not found with name: "+name));
     }
@@ -87,8 +93,17 @@ public class UserService {
 
     public String deleteUserByName(String username){
         User foundUser = userRepository.findByName(username).orElseThrow(() -> new RuntimeException("User not found with username: "+ username));
+        if (foundUser.getName().equals("System Admin")) throw new RuntimeException("You can't delete the admin");
         userRepository.delete(foundUser);
 
         return "Deleted " +username+ " from the database";
+    }
+
+    public String deleteUserById(Long id){
+        User foundUser = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found with username: "+ id));
+        if (foundUser.getName().equals("System Admin")) throw new RuntimeException("You can't delete the admin");
+        userRepository.delete(foundUser);
+
+        return "Deleted " +id+ " from the database";
     }
 }
