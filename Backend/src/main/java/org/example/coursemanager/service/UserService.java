@@ -77,16 +77,24 @@ public class UserService {
 
     public User updateUser(User user) {
         CustomUserDetails principal = getCurrentUser();
-        User foundUser = userRepository.findById(user.getId()).orElseThrow(() -> new UsernameNotFoundException("User not found with id: "+user.getId()));
+        User foundUser = userRepository.findById(user.getId())
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with id: "+user.getId()));
 
         if (principal.hasRole("STUDENT")){
-           throw new RuntimeException("You can't change other people's credentials");
-
+            throw new RuntimeException("You can't change other people's credentials");
         }
+
         foundUser.setEmail(user.getEmail());
-        foundUser.setPassword(passwordEncoder.encode(user.getPassword()));
+
+        if (user.getPassword() != null && !user.getPassword().trim().isEmpty()) {
+            foundUser.setPassword(passwordEncoder.encode(user.getPassword()));
+        }
+
         foundUser.setName(user.getName());
-        foundUser.setRoles(user.getRoles());
+
+        if (user.getRoles() != null && principal.hasRole("ADMIN")) {
+            foundUser.setRoles(user.getRoles());
+        }
 
         return userRepository.save(foundUser);
     }

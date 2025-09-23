@@ -41,7 +41,7 @@ public class SecurityConfig {
                                 .requestMatchers("/users/getById/*").hasAnyRole("ADMIN","TEACHER","STUDENT")
                                 .requestMatchers("/users/getCurrentUserByEmail").hasAnyRole("ADMIN","TEACHER","STUDENT")
                                 .requestMatchers("/users/create").hasRole("ADMIN")
-                                .requestMatchers("/users/update/*").hasAnyRole("ADMIN","STUDENT")
+                                .requestMatchers("/users/update/*").hasAnyRole("ADMIN","STUDENT","TEACHER")
                                 .requestMatchers("/users/deleteByName/*").hasRole("ADMIN")
                                 .requestMatchers("/users/deleteById/*").hasRole("ADMIN")
                                 //Course security endpoints
