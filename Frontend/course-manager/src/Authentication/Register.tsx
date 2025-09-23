@@ -35,7 +35,6 @@ export function Register() {
             email: email,
             password: password
         }).then((response) => {
-            console.log(response.data)
             setError("")
         }).catch((err: Error) => {
             setError("Registration failed.")

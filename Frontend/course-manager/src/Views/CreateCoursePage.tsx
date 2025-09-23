@@ -75,7 +75,6 @@ export default function CreateCoursePage({ role }: { role: Role }) {
             setPreview(null);
             setUploadedUrl(null);
 
-            console.log("Course created successfully:", res.data);
         } catch (err) {
             console.error("Error creating course:", err);
         }

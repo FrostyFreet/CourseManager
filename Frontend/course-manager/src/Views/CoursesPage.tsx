@@ -11,7 +11,7 @@ import defaultImage from "../public/default.webp";
 import { Navbar } from '../Layout/Navbar.tsx';
 import { Link, useLocation, useNavigate } from 'react-router';
 import type { Role} from '../types.tsx';
-import { enrollCourse, fetchCourses }  from '../utility/apiCalls';
+import { enrollCourse, fetchCourses, getCurrentUser }  from '../utility/apiCalls';
 
 const mockData=[
     {
@@ -58,7 +58,11 @@ export function CoursesPage({ role }: { role: Role } ) {
     const location = useLocation();
     const displayCourses = location.pathname === "/home" ? courseList.slice(0,10) : courseList
     const navigate = useNavigate()
-
+    const { data: currentUser } = useQuery({
+        queryKey: ["cUser",],
+        queryFn: () => getCurrentUser(),
+      });
+      
     return (
         <>
         <Navbar role={role} />
@@ -91,11 +95,27 @@ export function CoursesPage({ role }: { role: Role } ) {
                                 </CardContent>
                             </CardActionArea>
                         </Link>
+                            {currentUser && currentUser.roles === "ADMIN" ?
+                            <>
+                                <CardActions sx={{ justifyContent: "space-between" }}>
+                                        <Button variant="outlined" value={data.id} size="small" color="primary" onClick={() => { navigate(`/edit-course/${data.title}`, { state: {id: data.id}})}}>
+                                            Edit
+                                        </Button>
+                                        
+                                        <Button variant="contained" value={data.id} size="small" color="primary" onClick={(e) => {enrollCourse(Number(e.currentTarget.value)), navigate(0)}}>
+                                            Enroll
+                                        </Button>
+                                        
+                                </CardActions>
+                            </>
+                            :
                             <CardActions sx={{ justifyContent: "right" }}>
-                                <Button variant="contained" value={data.id} size="small" color="primary" onClick={(e) => {enrollCourse(Number(e.currentTarget.value)), navigate(0)}}>
-                                    Enroll
-                                </Button>
+                                        <Button variant="contained" value={data.id} size="small" color="primary" onClick={(e) => {enrollCourse(Number(e.currentTarget.value)), navigate(0)}}>
+                                            Enroll
+                                        </Button>
+                                        
                             </CardActions>
+                            }
                         </Card>
                     
                 </Grid>
