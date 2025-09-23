@@ -12,6 +12,7 @@ export default function CreateCoursePage({ role }: { role: Role }) {
         "imageUrl": ""
     })
 
+    const url = import.meta.env.VITE_API_BASE_URL
     const [file, setFile] = useState<File | null>(null);
     const [preview, setPreview] = useState<string | null>(null);
     const [uploadedUrl, setUploadedUrl] = useState<string | null>(null);
@@ -28,7 +29,7 @@ export default function CreateCoursePage({ role }: { role: Role }) {
         const formData = new FormData();
         formData.append("file", file);
 
-        const res = await axios.post("http://localhost:8080/upload", formData, {
+        const res = await axios.post(`${url}/upload`, formData, {
             headers: { 
                 "Content-Type": "multipart/form-data",
                 "Authorization": "Bearer " + localStorage.getItem("token"),
@@ -50,7 +51,7 @@ export default function CreateCoursePage({ role }: { role: Role }) {
 
         try {
             const res = await axios.post(
-                "http://localhost:8080/course/create",
+                `${url}/course/create`,
                 {
                     title: formData.title,
                     description: formData.description,

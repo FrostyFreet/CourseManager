@@ -25,9 +25,6 @@ export function Login({ setToken, setRole, setIsLoggedIn }: LoginProps) {
     const [email,setEmail] = useState<string>("")
     const [password,setPassword] = useState<string>("")
 
-    console.log(url);
-    
-
     const navigate = useNavigate();
     function login(e:FormEvent){
         e.preventDefault()
