@@ -50,7 +50,7 @@ export default function CreateCoursePage({ role }: { role: Role }) {
         }
 
         try {
-            const res = await axios.post(
+             await axios.post(
                 `${url}/course/create`,
                 {
                     title: formData.title,

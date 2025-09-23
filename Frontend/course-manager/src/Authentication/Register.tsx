@@ -34,7 +34,7 @@ export function Register() {
         axios.post(`${url}/auth/register`, {
             email: email,
             password: password
-        }).then((response) => {
+        }).then(() => {
             setError("")
         }).catch((err: Error) => {
             setError("Registration failed.")
