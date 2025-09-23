@@ -20,7 +20,7 @@ export function Register() {
     const [password, setPassword] = useState<string>("")
     const [passwordAgain, setPasswordAgain] = useState<string>("")
     const [error, setError] = useState<string>("")
-
+    const url = import.meta.env.VITE_API_BASE_URL
     const navigate = useNavigate()
 
     function register(e: FormEvent) {
@@ -31,7 +31,7 @@ export function Register() {
             return
         }
 
-        axios.post("http://localhost:8080/auth/register", {
+        axios.post(`${url}/auth/register`, {
             email: email,
             password: password
         }).then((response) => {

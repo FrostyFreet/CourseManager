@@ -21,9 +21,9 @@ import { EditProfile } from "./Views/EditProfile.tsx";
 const queryClient = new QueryClient()
 
 function App() {
-    const [token, setToken] = useState<string>()
+    const [_token, setToken] = useState<string>()
     const [role,setRole] = useState<Role>()
-    const [isLoggedIn, setIsLoggedIn]=useState<boolean>(false)
+    const [_isLoggedIn, setIsLoggedIn]=useState<boolean>(false)
 
     const navigate = useNavigate()
     const location = useLocation()

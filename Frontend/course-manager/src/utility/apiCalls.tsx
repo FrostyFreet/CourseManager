@@ -1,29 +1,30 @@
 import axios from "axios"
 import { jwtDecode } from "jwt-decode"
+const url = import.meta.env.VITE_API_BASE_URL
 
 export async function fetchCourses() {
-    const response = await axios.get("http://localhost:8080/course/getAll",{
+    const response = await axios.get(`${url}/course/getAll`,{
         headers: { 'Authorization':'Bearer '+ localStorage.getItem("token") }
     })
     return response.data
 }
 
 export async function fetchCourseById(id:number) {
-    const response = await axios.get(`http://localhost:8080/course/getById/${id}`,{
+    const response = await axios.get(`${url}/course/getById/${id}`,{
         headers: { 'Authorization':'Bearer '+ localStorage.getItem("token") }
     })
     return response.data
 }
 
 export async function fetchCourseByTitle(title:string){
-     const response = await axios.get(`http://localhost:8080/course/getByTitle/${title}`,{
+     const response = await axios.get(`${url}/course/getByTitle/${title}`,{
         headers: { 'Authorization':'Bearer '+ localStorage.getItem("token") }
     })
     return response.data
 }
 
 export async function getMyCourses(){
-       const res = await axios.get("http://localhost:8080/course/getCoursesByTeacher",{
+       const res = await axios.get(`${url}/course/getCoursesByTeacher`,{
             headers: { 
                 "Authorization": "Bearer " + localStorage.getItem("token"),
             },
@@ -38,7 +39,7 @@ export async function updateMyCourse(course: {
   startDate: string
   imageUrl: string
 }) {
-  const res = await axios.put("http://localhost:8080/course/update", course, {
+  const res = await axios.put(`${url}/course/update`, course, {
     headers: {
       Authorization: `Bearer ${localStorage.getItem("token")}`,
     },
@@ -49,7 +50,7 @@ export async function updateMyCourse(course: {
 
 
 export async function fetchMyEnrollMents(){
-     const res = await axios.get("http://localhost:8080/enrollment/getAll",{
+     const res = await axios.get(`${url}/enrollment/getAll`,{
             headers: { 
                 "Authorization": "Bearer " + localStorage.getItem("token"),
             },
@@ -59,7 +60,7 @@ export async function fetchMyEnrollMents(){
 }
 
 export async function removeEnrolledStudent(id:number){
-     const res = await axios.delete(`http://localhost:8080/enrollment/deleteById/${id}`,{
+     const res = await axios.delete(`${url}/enrollment/deleteById/${id}`,{
             headers: { 
                 "Authorization": "Bearer " + localStorage.getItem("token"),
             },
@@ -69,7 +70,7 @@ export async function removeEnrolledStudent(id:number){
 }
 
 export async function getAllEnrolledUserByCourseId(id:number){
-    const res = await axios.get(`http://localhost:8080/enrollment/getAllByCourseId/${id}`,{
+    const res = await axios.get(`${url}/enrollment/getAllByCourseId/${id}`,{
             headers: { 
                 "Authorization": "Bearer " + localStorage.getItem("token"),
             },
@@ -81,7 +82,7 @@ export async function getAllEnrolledUserByCourseId(id:number){
 
 
 export async function getUserById(id:number){
-    const res = await axios.get(`http://localhost:8080/users/getById/${id}`,{
+    const res = await axios.get(`${url}/users/getById/${id}`,{
             headers: { 
                 "Authorization": "Bearer " + localStorage.getItem("token"),
             },
@@ -91,7 +92,7 @@ export async function getUserById(id:number){
 }
 
 export async function getCurrentUser(){
-    const res = await axios.get(`http://localhost:8080/users/getCurrentUserByEmail`,{
+    const res = await axios.get(`${url}/users/getCurrentUserByEmail`,{
             headers: { 
                 "Authorization": "Bearer " + localStorage.getItem("token"),
             },
@@ -100,8 +101,8 @@ export async function getCurrentUser(){
     return res.data
 }
 
-export async function updateUser(payload){
-    const res = await axios.put(`http://localhost:8080/users/update/${payload.id}`,
+export async function updateUser(payload:any){
+    const res = await axios.put(`${url}/users/update/${payload.id}`,
         payload,
         {
             headers: { 
@@ -116,7 +117,7 @@ export async function updateUser(payload){
 
 
 export async function deleteUser(id:number){
-    const res = await axios.delete(`http://localhost:8080/users/deleteById/${id}`,{
+    const res = await axios.delete(`${url}/users/deleteById/${id}`,{
             headers: { 
                 "Authorization": "Bearer " + localStorage.getItem("token"),
             },
@@ -126,7 +127,7 @@ export async function deleteUser(id:number){
 }
 
 export async function getAllUsers(){
-     const res = await axios.get(`http://localhost:8080/users/getAll`,{
+     const res = await axios.get(`${url}/users/getAll`,{
             headers: { 
                 "Authorization": "Bearer " + localStorage.getItem("token"),
             },
@@ -136,7 +137,7 @@ export async function getAllUsers(){
 }
 
 export async function enrollCourse(courseId:number){
-    const res = await axios.post("http://localhost:8080/enrollment/create",
+    const res = await axios.post(`${url}/enrollment/create`,
             {
             course: { id: courseId } 
             },
@@ -150,7 +151,7 @@ export async function enrollCourse(courseId:number){
     return res.data
 }
 export async function withDrawCourse(enrollment_id:number){
-    const res = await axios.delete(`http://localhost:8080/enrollment/deleteById/${enrollment_id}`,{
+    const res = await axios.delete(`${url}/enrollment/deleteById/${enrollment_id}`,{
             headers: { 
                 "Authorization": "Bearer " + localStorage.getItem("token"),
             },
@@ -160,7 +161,7 @@ export async function withDrawCourse(enrollment_id:number){
 }
 
 export async function deleteCourse(courseId:number){
-    const res = await axios.delete(`http://localhost:8080/course/deleteById/${courseId}`,{
+    const res = await axios.delete(`${url}/course/deleteById/${courseId}`,{
             headers: { 
                 "Authorization": "Bearer " + localStorage.getItem("token"),
             },
@@ -192,7 +193,7 @@ export async function checkIsLoggedIn() {
     
 
     try {
-        const res = await fetch("http://localhost:8080/auth/refresh", {
+        const res = await fetch(`${url}/auth/refresh`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ refreshToken })
@@ -222,7 +223,7 @@ export async function logOut(){
      const refreshToken = localStorage.getItem("refreshToken")
      const token = localStorage.getItem("token")
      try {
-        const res = await axios.post("http://localhost:8080/auth/logOut",{
+        const res = await axios.post(`${url}/auth/logOut`,{
             refreshToken
         })
         if (refreshToken) localStorage.removeItem("refreshToken")

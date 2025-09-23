@@ -21,16 +21,18 @@ interface LoginProps {
 }
 
 export function Login({ setToken, setRole, setIsLoggedIn }: LoginProps) {
-
+    const url = import.meta.env.VITE_API_BASE_URL
     const [email,setEmail] = useState<string>("")
     const [password,setPassword] = useState<string>("")
 
+    console.log(url);
+    
 
     const navigate = useNavigate();
     function login(e:FormEvent){
         e.preventDefault()
 
-        axios.post("http://localhost:8080/auth/login",{
+        axios.post(`${url}/auth/login`,{
             email: email,
             password:password
         }).then((response) => {
