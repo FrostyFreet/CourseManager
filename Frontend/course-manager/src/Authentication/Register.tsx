@@ -19,7 +19,7 @@ export function Register() {
     const [fullName, setFullName] = useState<string>("")
     const [password, setPassword] = useState<string>("")
     const [passwordAgain, setPasswordAgain] = useState<string>("")
-    const [error, setError] = useState<string>("")
+    const [status, setStatus] = useState<"Registration failed." | "Passwords do not match." | "Registered! Now you can log in!">()
     const url = import.meta.env.VITE_API_BASE_URL
     const navigate = useNavigate()
 
@@ -27,22 +27,24 @@ export function Register() {
         e.preventDefault()
 
         if (password !== passwordAgain) {
-            setError("Passwords do not match.")
+            setStatus("Passwords do not match.")
             return
         }
 
         axios.post(`${url}/auth/register`, {
             email: email,
+            name:fullName,
             password: password
         }).then(() => {
-            setError("")
+            setStatus("Registered! Now you can log in!")
         }).catch((err: Error) => {
-            setError("Registration failed.")
+            setStatus("Registration failed.")
             console.log(err)
         })
 
         setPassword("")
         setPasswordAgain("")
+        setFullName("")
         setEmail("")
     }
 
@@ -100,11 +102,19 @@ export function Register() {
                                 />
                                 <FormHelperText id="password-again-helper-text"></FormHelperText>
                             </FormControl>
-                            {error && (
+                            {status ?  (
+                                status === "Passwords do not match." || status==="Registration failed." ? (
                                 <Typography color="error" align="center" variant="body2">
-                                    {error}
+                                    {status}
                                 </Typography>
-                            )}
+                                )
+                                :
+                                (
+                                  <Typography color="success" align="center" variant="body2">
+                                    {status}
+                                </Typography>
+                                
+                            )):null}
                             <Button variant="contained" type="submit" fullWidth>
                                 Register
                             </Button>

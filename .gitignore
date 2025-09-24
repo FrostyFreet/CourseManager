@@ -1,6 +1,6 @@
 HELP.md
 .env
-Frontend/course-manager/.env.production
+Frontend\course-manager\.env.production
 Backend/.env
 target/
 .mvn/wrapper/maven-wrapper.jar

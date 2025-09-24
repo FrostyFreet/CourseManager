@@ -24,6 +24,8 @@ export function Login({ setToken, setRole, setIsLoggedIn }: LoginProps) {
     const url = import.meta.env.VITE_API_BASE_URL
     const [email,setEmail] = useState<string>("")
     const [password,setPassword] = useState<string>("")
+    const [status, setStatus] = useState<"Incorrect email or password!"  | "Logging in! Please wait!">()
+
 
     const navigate = useNavigate();
     function login(e:FormEvent){
@@ -36,12 +38,14 @@ export function Login({ setToken, setRole, setIsLoggedIn }: LoginProps) {
             setToken(response.data.token)
             setRole(response.data.role)
             setIsLoggedIn(true)
+            setStatus("Logging in! Please wait!")
 
             localStorage.setItem("token", response.data.token)
             localStorage.setItem("refreshToken", response.data.refreshToken);
             navigate("/home")
         })
             .catch((err: Error) =>{
+                setStatus("Incorrect email or password!")
                 console.log(err)
         })
 
@@ -80,6 +84,17 @@ export function Login({ setToken, setRole, setIsLoggedIn }: LoginProps) {
                                 />
                                 <FormHelperText id="password-helper-text"></FormHelperText>
                             </FormControl>
+                            {status ? (
+                                status === "Logging in! Please wait!" ? (
+                                    <Typography align="center" variant="body2" sx={{ color: 'success.main' }}>
+                                        {status}
+                                    </Typography>
+                                ) : (
+                                    <Typography color="error" align="center" variant="body2">
+                                        {status}
+                                    </Typography>
+                                )
+                            ) : null}
 
                             <Button variant="contained" type="submit" fullWidth>
                                 Sign In

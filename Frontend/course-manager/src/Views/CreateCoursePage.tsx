@@ -16,6 +16,8 @@ export default function CreateCoursePage({ role }: { role: Role }) {
     const [file, setFile] = useState<File | null>(null);
     const [preview, setPreview] = useState<string | null>(null);
     const [uploadedUrl, setUploadedUrl] = useState<string | null>(null);
+    const [status, setStatus] = useState<"Course creation failed!" | "Course created successfully!">()
+
 
     function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
         if (e.target.files) {
@@ -71,11 +73,14 @@ export default function CreateCoursePage({ role }: { role: Role }) {
                 startDate: "",
                 imageUrl: ""
             });
+            setStatus("Course created successfully!")
             setFile(null);
             setPreview(null);
             setUploadedUrl(null);
 
+
         } catch (err) {
+            setStatus("Course creation failed!")
             console.error("Error creating course:", err);
         }
     }
@@ -123,6 +128,12 @@ export default function CreateCoursePage({ role }: { role: Role }) {
                     <Input type="file" onChange={handleFileChange}/>
                     {preview && <img src={preview} alt="preview" width={200}/>}
                     
+                    {status && (
+                        <Typography color="error" align="center" variant="body2">
+                                    {status}
+                        </Typography>
+                    )}
+
                     <Button type="submit" variant="contained" size="large"sx={{ borderRadius: 2 }}>
                     Create Course
                     </Button>
