@@ -5,13 +5,15 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import CardActionArea from '@mui/material/CardActionArea';
 import CardActions from '@mui/material/CardActions';
-import {Grid} from "@mui/material";
+import {Alert, Grid} from "@mui/material";
 import {useQuery} from "@tanstack/react-query";
 import defaultImage from "../public/default.webp";
 import { Navbar } from '../Layout/Navbar.tsx';
 import { Link, useLocation, useNavigate } from 'react-router';
-import type { Role} from '../types.tsx';
+import type {Role} from '../types.tsx';
 import { deleteCourse, enrollCourse, fetchCourses, getCurrentUser }  from '../utility/apiCalls';
+import CheckIcon from '@mui/icons-material/Check';
+import { useState } from 'react';
 
 const mockData=[
     {
@@ -62,7 +64,9 @@ export function CoursesPage({ role }: { role: Role } ) {
         queryKey: ["cUser",],
         queryFn: () => getCurrentUser(),
       });
-      
+    const [enrollStatus, setEnrollStatus] = useState<Record<number, 'idle' | 'success' | 'error'>>({});
+
+
     return (
         <>
         <Navbar role={role} />
@@ -101,7 +105,19 @@ export function CoursesPage({ role }: { role: Role } ) {
                                         <Button variant="outlined" value={data.id} size="small" color="primary" onClick={() => { navigate(`/edit-course/${data.title}`, { state: {id: data.id}})}}>
                                             Edit
                                         </Button>
-                                        
+
+                                        <Button variant="contained" value={data.id} size="small" color="primary" onClick={async () => {
+                                            const res = await enrollCourse(data.id);
+                                                if (res?.status) {
+                                                    setEnrollStatus((prev:any) => ({ ...prev, [data.id]: 'success' }));
+                                                } else {
+                                                    setEnrollStatus((prev:any) => ({ ...prev, [data.id]: 'error' }));
+                                                }
+                            
+                                            }}>
+                                            Enroll
+                                        </Button>
+
                                         <Button variant="contained" value={data.id} size="small" color="primary" onClick={(e) => {deleteCourse(Number(e.currentTarget.value)), navigate(0)}}>
                                             Delete
                                         </Button>
@@ -110,13 +126,31 @@ export function CoursesPage({ role }: { role: Role } ) {
                             </>
                             :
                             <CardActions sx={{ justifyContent: "right" }}>
-                                <Button variant="contained" value={data.id} size="small" color="primary" onClick={(e) => {enrollCourse(Number(e.currentTarget.value)), navigate(0)}}>
+                                <Button variant="contained" value={data.id} size="small" color="primary" onClick={async () => {
+                                    const res = await enrollCourse(data.id);
+                                        if (res?.status) {
+                                            setEnrollStatus(prev => ({ ...prev, [data.id]: 'success' }));
+                                        } else {
+                                            setEnrollStatus(prev => ({ ...prev, [data.id]: 'error' }));
+                                        }
+                                    }}>
                                     Enroll
                                 </Button>
                                         
                             </CardActions>
                             }
                         </Card>
+
+                        {enrollStatus[data.id] === 'success' && (
+                            <Alert icon={<CheckIcon fontSize="inherit" />} severity="success" sx={{ mt: 1 }}>
+                                You enrolled successfully
+                            </Alert>
+                        )}
+                        {enrollStatus[data.id] === 'error' && (
+                            <Alert severity="error" sx={{ mt: 1 }}>
+                                Enrollment failed
+                            </Alert>
+                        )}
                     
                 </Grid>
             ))}

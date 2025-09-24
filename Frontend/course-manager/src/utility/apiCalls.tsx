@@ -137,7 +137,9 @@ export async function getAllUsers(){
 }
 
 export async function enrollCourse(courseId:number){
-    const res = await axios.post(`${url}/enrollment/create`,
+   
+    try{
+        const res = await axios.post(`${url}/enrollment/create`,
             {
             course: { id: courseId } 
             },
@@ -147,8 +149,14 @@ export async function enrollCourse(courseId:number){
             }
             }
         )
+        return {...res.data, status:true}
+    }
+    catch(e){
+         return {status:false}
+    }
+   
 
-    return res.data
+   
 }
 export async function withDrawCourse(enrollment_id:number){
     const res = await axios.delete(`${url}/enrollment/deleteById/${enrollment_id}`,{
