@@ -11,7 +11,7 @@ import defaultImage from "../public/default.webp";
 import { Navbar } from '../Layout/Navbar.tsx';
 import { Link, useLocation, useNavigate } from 'react-router';
 import type { Role} from '../types.tsx';
-import { enrollCourse, fetchCourses, getCurrentUser }  from '../utility/apiCalls';
+import { deleteCourse, enrollCourse, fetchCourses, getCurrentUser }  from '../utility/apiCalls';
 
 const mockData=[
     {
@@ -102,17 +102,17 @@ export function CoursesPage({ role }: { role: Role } ) {
                                             Edit
                                         </Button>
                                         
-                                        <Button variant="contained" value={data.id} size="small" color="primary" onClick={(e) => {enrollCourse(Number(e.currentTarget.value)), navigate(0)}}>
-                                            Enroll
+                                        <Button variant="contained" value={data.id} size="small" color="primary" onClick={(e) => {deleteCourse(Number(e.currentTarget.value)), navigate(0)}}>
+                                            Delete
                                         </Button>
                                         
                                 </CardActions>
                             </>
                             :
                             <CardActions sx={{ justifyContent: "right" }}>
-                                        <Button variant="contained" value={data.id} size="small" color="primary" onClick={(e) => {enrollCourse(Number(e.currentTarget.value)), navigate(0)}}>
-                                            Enroll
-                                        </Button>
+                                <Button variant="contained" value={data.id} size="small" color="primary" onClick={(e) => {enrollCourse(Number(e.currentTarget.value)), navigate(0)}}>
+                                    Enroll
+                                </Button>
                                         
                             </CardActions>
                             }

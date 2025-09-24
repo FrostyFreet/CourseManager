@@ -18,7 +18,7 @@ import type { Role } from "../types.tsx";
 import { getCurrentUser, logOut } from "../utility/apiCalls.tsx";
 import { useQuery } from "@tanstack/react-query";
 
-const admin = ['Összes kurzus', 'Felhasználók', 'Beiratkozásaim']
+const admin = ['Összes kurzus', 'Felhasználók', 'Beiratkozásaim',"Kurzusaim"]
 const teacher = ['Kurzusaim','Összes kurzus', 'Beiratkozásaim']
 const student = ['Összes kurzus', 'Beiratkozásaim']
 
@@ -119,8 +119,9 @@ export function Navbar({ role }: { role: Role }) {
                                 <MenuItem key={page} onClick={()=>{
                                     handleCloseNavMenu
                                     if (page === "Összes kurzus") navigate("/courses")
-                                    if (page === "Beiratkozásaim") navigate("/enrollments");
+                                    if (page === "Beiratkozásaim") navigate("/enrollments")
                                     if (page === "Felhasználók") navigate("/users")
+                                    if (page === "Kurzusaim") navigate("/my-courses")
                                 }}>
                                     <Typography sx={{ textAlign: 'center' }}>{page}</Typography>
                                 </MenuItem>
@@ -194,8 +195,9 @@ export function Navbar({ role }: { role: Role }) {
                                 onClick={()=>{
                                     handleCloseNavMenu
                                     if (page === "Összes kurzus") navigate("/courses")
-                                    if (page === "Beiratkozásaim") navigate("/enrollments");
+                                    if (page === "Beiratkozásaim") navigate("/enrollments")
                                     if (page === "Felhasználók") navigate("/users")
+                                    if (page === "Kurzusaim") navigate("/my-courses")
                                 }}
                                 sx={{
                                     my: 2,

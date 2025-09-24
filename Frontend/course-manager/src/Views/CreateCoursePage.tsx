@@ -128,11 +128,17 @@ export default function CreateCoursePage({ role }: { role: Role }) {
                     <Input type="file" onChange={handleFileChange}/>
                     {preview && <img src={preview} alt="preview" width={200}/>}
                     
-                    {status && (
-                        <Typography color="error" align="center" variant="body2">
-                                    {status}
-                        </Typography>
-                    )}
+                      {status ? (
+                        status === "Course creation failed!" ? (
+                            <Typography color="error" align="center" variant="body2">
+                                {status}
+                            </Typography>
+                        ) : (
+                            <Typography align="center" variant="body2" sx={{ color: 'success.main' }}>
+                                {status}
+                            </Typography>
+                        )
+                    ) : null}
 
                     <Button type="submit" variant="contained" size="large"sx={{ borderRadius: 2 }}>
                     Create Course
